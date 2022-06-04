@@ -1,38 +1,41 @@
 .386
 .model flat, c
 .code
-public light_switch1
-light_switch1 proc switches
+public light_switch
+light_switch proc switches
         mov     edx, esp
         mov     eax, 0
         mov     ecx, switches
         mov     ebx, ecx
         shr     ecx, 2
 init:   push eax
-        loop    init    ;initialize the memory space
-        mov     eax, 0  ;which person
-personloop: inc eax
+        loop    init            ;initialize the memory space
+        mov     eax, 0          ;which person
+personloop: inc eax             ;next person
         cmp     eax, ebx
-        ja      done
+        ja      doneswitch      ;all persons are done switching
         mov     edi, esp
-        call    switchloop
+        dec     edi             ;1 indexed array
+        call    switchloop      ;do all switches for this person
         jmp     personloop
-done:   mov ecx, ebx
-        mov     eax, 0
+doneswitch: mov ecx, ebx
+        mov     eax, 0          ;zero the counter
         mov     esi, esp
 count:  cmp byte ptr[esi], 0
         je      count1
-        inc     eax
+        inc     eax         ;count the switches that are set
 count1: inc esi
         loop    count
         nop
-        mov     esp, edx
+        mov     esp, edx    ;restore stack pointer
         ret
-light_switch1 endp
-switchloop: xor byte ptr[edi], 1
-        add     edi, eax
+light_switch endp
+switchloop: 
+        add     edi, eax            ;next switch
         cmp     edi, edx
-        jb      switchloop
+        jae     @F
+        xor byte ptr[edi], 1    ;toggle one switch
+        jmp     switchloop  
+@@:
         ret
-
-end
+        end
