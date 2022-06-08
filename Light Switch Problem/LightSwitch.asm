@@ -4,11 +4,11 @@
 public light_switch
 light_switch proc switches
         mov     edx, esp
-        xor     eax, eax
-        mov     ecx, switches
+        mov     ecx, switches   ;how many switches
         mov     ebx, ecx
-        shr     ecx, 2
-init:   push    eax
+        shr     ecx, 2          ;divide by 4
+        xor     eax, eax        ;zero the register
+init:   push    eax             ;push 4 bytes
         loop    init            ;initialize the memory space
         mov     eax, 0          ;which person
 personloop: inc eax             ;next person
@@ -26,7 +26,6 @@ count:  cmp byte ptr[esi], 0
         inc     eax             ;count the switches that are set
 count1: inc esi
         loop    count
-        nop
         mov     esp, edx        ;restore stack pointer
         ret
 light_switch endp
