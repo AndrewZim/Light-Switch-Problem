@@ -10,10 +10,8 @@ light_switch proc switches
         xor     eax, eax        ;zero the register
 init:   push    eax             ;push 4 bytes
         loop    init            ;initialize the memory space
-        mov     eax, 0          ;which person
-personloop: inc eax             ;next person
-        cmp     eax, ebx
-        ja      doneswitch      ;all persons are done switching
+        mov     eax, 1          ;start with person 1
+personloop:
         mov     edi, esp
         dec     edi             ;1 indexed array
         add     edi, eax        ;next switch (first one always works)
@@ -21,8 +19,10 @@ switchloop:
         xor byte ptr[edi], 1    ;toggle one switch
         add     edi, eax        ;next switch
         cmp     edi, edx
-        jb      switchloop  
-        jmp     personloop
+        jb      switchloop
+        inc     eax
+        cmp     eax,ebx         ;last person?
+        jbe     personloop
 doneswitch: mov ecx, ebx
         mov     eax, 0          ;zero the counter
         mov     esi, esp
@@ -33,11 +33,4 @@ count1: inc     esi
         mov     esp, edx        ;restore stack pointer
         ret
 light_switch endp
-switchloop: 
-        add     edi, eax        ;next switch
-        cmp     edi, edx
-        jae     @F
-        xor byte ptr[edi], 1    ;toggle one switch
-        jmp     switchloop  
-@@:     ret
         end
