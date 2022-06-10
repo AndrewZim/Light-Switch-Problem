@@ -16,15 +16,19 @@ personloop: inc eax             ;next person
         ja      doneswitch      ;all persons are done switching
         mov     edi, esp
         dec     edi             ;1 indexed array
-        call    switchloop      ;do all switches for this person
+        add     edi, eax        ;next switch (first one always works)
+switchloop: 
+        xor byte ptr[edi], 1    ;toggle one switch
+        add     edi, eax        ;next switch
+        cmp     edi, edx
+        jb      switchloop  
         jmp     personloop
 doneswitch: mov ecx, ebx
         mov     eax, 0          ;zero the counter
         mov     esi, esp
-count:  cmp byte ptr[esi], 0
-        je      count1
-        inc     eax             ;count the switches that are set
-count1: inc esi
+count:  movzx   ebx,byte ptr [esi]
+        add     eax,ebx
+count1: inc     esi
         loop    count
         mov     esp, edx        ;restore stack pointer
         ret

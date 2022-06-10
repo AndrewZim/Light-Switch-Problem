@@ -7,7 +7,7 @@ int main()
     LARGE_INTEGER timeend;
     LARGE_INTEGER frequency;
     int switches_on;
-    int switches = 100;
+    int switches = 1000000;
 
     std::cout << "Light Switch Problem with " << switches << " switches\n";
     QueryPerformanceFrequency(&frequency);
