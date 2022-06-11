@@ -8,7 +8,11 @@ int main()
     LARGE_INTEGER frequency;
     int switches_on;
     int switches = 1000000;
-
+    std::cout << "Light Switch Problem, how many switches? ";
+    std::cin >> switches;
+    if (switches < 1 or switches > 1000000) {
+        switches = 1000000;
+    }
     std::cout << "Light Switch Problem with " << switches << " switches\n";
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&timestart);

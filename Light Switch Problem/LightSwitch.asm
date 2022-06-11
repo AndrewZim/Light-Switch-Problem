@@ -7,9 +7,12 @@ light_switch proc switches
         mov     ecx, switches   ;how many switches
         mov     ebx, ecx
         shr     ecx, 2          ;divide by 4
+        inc     ecx
         xor     eax, eax        ;zero the register
 init:   push    eax             ;push 4 bytes
         loop    init            ;initialize the memory space
+        mov     esp,edx
+        sub     esp,ebx
         mov     eax, 1          ;start with person 1
 personloop:
         mov     edi, esp
